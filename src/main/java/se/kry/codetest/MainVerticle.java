@@ -11,6 +11,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import se.kry.codetest.registry.model.Service;
 import se.kry.codetest.registry.ServiceRegistry;
@@ -54,7 +55,24 @@ public class MainVerticle extends AbstractVerticle {
     final Future<Void> future = Future.future();
     poller = new BackgroundPoller(vertx, registry);
     final Router router = Router.router(vertx);
+
+    // allowedHeaders = new HashSet<>();
+    // allowedHeaders.add("x-requested-with");
+    // allowedHeaders.add("Access-Control-Allow-Origin");
+    // allowedHeaders.add("origin");
+    // allowedHeaders.add("Content-Type");
+    // allowedHeaders.add("accept");
+
+    // allowedMethods = new HashSet<>();
+    // allowedMethods.add(HttpMethod.GET);
+    // allowedMethods.add(HttpMethod.POST);
+    // allowedMethods.add(HttpMethod.DELETE);
+    // allowedMethods.add(HttpMethod.PATCH);
+    // allowedMethods.add(HttpMethod.OPTIONS);
+    // allowedMethods.add(HttpMethod.PUT);
+
     router.route().handler(BodyHandler.create());
+    router.route().handler(CorsHandler.create(".*."));
     vertx.setPeriodic(1000 * 60, timerId -> poller.pollServices());
     setRoutes(router);
     vertx
