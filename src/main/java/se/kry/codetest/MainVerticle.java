@@ -16,6 +16,7 @@ import io.vertx.ext.web.handler.StaticHandler;
 import se.kry.codetest.registry.model.Service;
 import se.kry.codetest.registry.ServiceRegistry;
 import se.kry.codetest.registry.ServiceRegistryFactory;
+import se.kry.codetest.registry.model.ServiceStatus;
 
 /**
  * Deploys a verticle that keeps a registry of services and their latest status. It also regularly polls
@@ -56,23 +57,19 @@ public class MainVerticle extends AbstractVerticle {
     poller = new BackgroundPoller(vertx, registry);
     final Router router = Router.router(vertx);
 
-    // allowedHeaders = new HashSet<>();
-    // allowedHeaders.add("x-requested-with");
-    // allowedHeaders.add("Access-Control-Allow-Origin");
-    // allowedHeaders.add("origin");
-    // allowedHeaders.add("Content-Type");
-    // allowedHeaders.add("accept");
-
-    // allowedMethods = new HashSet<>();
-    // allowedMethods.add(HttpMethod.GET);
-    // allowedMethods.add(HttpMethod.POST);
-    // allowedMethods.add(HttpMethod.DELETE);
-    // allowedMethods.add(HttpMethod.PATCH);
-    // allowedMethods.add(HttpMethod.OPTIONS);
-    // allowedMethods.add(HttpMethod.PUT);
-
     router.route().handler(BodyHandler.create());
-    router.route().handler(CorsHandler.create(".*."));
+    router.route().handler(CorsHandler.create(".*.") 
+    .allowedMethod(io.vertx.core.http.HttpMethod.GET)
+    .allowedMethod(io.vertx.core.http.HttpMethod.DELETE)
+    .allowedMethod(io.vertx.core.http.HttpMethod.POST)
+    .allowedMethod(io.vertx.core.http.HttpMethod.PUT)
+    .allowCredentials(true)
+    .allowedHeader("Access-Control-Allow-Method")
+    .allowedHeader("Access-Control-Allow-Origin")
+    .allowedHeader("Access-Control-Allow-Credentials")
+    .allowedHeader("Content-Type"));
+
+
     vertx.setPeriodic(1000 * 60, timerId -> poller.pollServices());
     setRoutes(router);
     vertx
@@ -97,6 +94,7 @@ public class MainVerticle extends AbstractVerticle {
     router.get("/service").handler(this::handleGetServices);
     router.post("/service").handler(this::handlePostService);
     router.delete("/service").handler(this::handleDeleteService);
+    router.put("/service").handler(this::handleUpdateService);
   }
 
   /**
@@ -138,6 +136,28 @@ public class MainVerticle extends AbstractVerticle {
                 .setStatusMessage(e.toString())
                 .setStatusCode(400)
                 .end();
+    }
+  }
+
+
+  /**
+   * Handles the call to PUT /service api
+   * Deletes the current service by name
+   * Creates a new service to the registry given its name and url.
+   * Usually the api should support Put/Patch methods, but I don't seem to have 
+   * access to se.kry.codetest.registry.ServiceRegistry to read up more.
+   */
+  private void handleUpdateService(RoutingContext routingContext) {
+    final JsonObject jsonBody = routingContext.getBodyAsJson();
+    try {
+      registry.updateServiceStatus(jsonBody.getString("name"), ServiceStatus.OK).setHandler(
+              res -> handleResponse(res, routingContext));
+    } catch (IllegalArgumentException e) {
+      routingContext.response()
+              .putHeader("content-type", "application/json")
+              .setStatusMessage(e.toString())
+              .setStatusCode(400)
+              .end();
     }
   }
 

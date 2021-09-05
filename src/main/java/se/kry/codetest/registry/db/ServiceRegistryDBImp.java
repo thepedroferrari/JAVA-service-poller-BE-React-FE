@@ -105,8 +105,9 @@ public class ServiceRegistryDBImp implements ServiceRegistry {
     }
 
     @Override
-    public Future<Boolean> updateServiceStatus(String serviceName,
-                                    ServiceStatus status) throws IllegalArgumentException {
+    public Future<Boolean> updateServiceStatus(
+        String serviceName,
+        ServiceStatus status) throws IllegalArgumentException {
         validateServiceName(serviceName);
         final Future future = Future.future();
         final JsonArray params = new JsonArray().add(status).add(serviceName);
