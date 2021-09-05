@@ -1,0 +1,5 @@
+node_modules
+dist
+coverage
+src/main/react/serviceWorkerRegistration.ts
+src/main/react/service-worker.ts
