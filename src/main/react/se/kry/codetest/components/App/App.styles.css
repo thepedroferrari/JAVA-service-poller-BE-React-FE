@@ -1,0 +1,43 @@
+.app-banner {
+  display: grid;
+  grid-template-columns: 70px 1fr min-content;
+  place-items: center;
+}
+.app-banner h1 {
+  margin: 0;
+}
+
+main {
+  display: grid;
+  grid-template-rows: 1fr min-content;
+  margin-bottom: var(--invert-padding);
+}
+
+.form-footer {
+  background: var(--dark);
+  color: var(--white);
+  margin: 0 var(--invert-padding);
+  padding: var(--padding);
+  display: grid;
+}
+
+@media screen and (min-width: 26rem) {
+  .form-footer {
+    border-radius: 0 0 var(--base-size-x2) var(--base-size-x2);
+  }
+}
+
+.form-footer .errors {
+  background-color: var(--color-warning);
+  border-radius: var(--border-radius);
+  margin: calc(var(--margin) / 2);
+}
+
+.form-footer input[type="button"] {
+  background: var(--green);
+  margin: 0;
+  place-self: end;
+}
+.form-footer label {
+  display: grid;
+}

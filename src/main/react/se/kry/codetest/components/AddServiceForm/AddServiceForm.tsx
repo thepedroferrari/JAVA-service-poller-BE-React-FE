@@ -7,23 +7,25 @@ export const AddServiceForm = () => {
   return (
     <form>
       <label htmlFor="service-name">
-        Service Name{" "}
+        <span>Service Name</span>
         <input
           type="text"
           value={payload.name}
           id="service-name"
+          placeholder="Heartburn"
           onChange={(e) => setPayload(e, "name")}
         />
-      </label>{" "}
+      </label>
       <label htmlFor="service-url">
-        Service URL{" "}
+        <span>Service URL</span>
         <input
           type="text"
           value={payload.url}
           id="service-url"
+          placeholder="http://heartburn.com"
           onChange={(e) => setPayload(e, "url")}
         />
-      </label>{" "}
+      </label>
       <AddServiceButton />
     </form>
   )

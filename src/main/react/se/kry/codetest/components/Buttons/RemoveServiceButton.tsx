@@ -4,7 +4,7 @@ import { handleAction } from "../../utils/handleActions"
 export const RemoveServiceButton = ({ name }: Pick<Payload, "name">) => (
   <input
     type="button"
-    value="Remove Service"
+    value="Delete"
     onClick={() => handleAction("DELETE", { name })}
   />
 )
