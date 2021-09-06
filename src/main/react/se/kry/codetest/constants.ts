@@ -6,4 +6,5 @@ export const SERVER_URL = isDevelopment
 export const FETCH_ROUTE = "service"
 export enum MESSAGES {
   SERVER_ERROR = "Error accessing the server, please try again.",
+  NO_SERVICES_AVAILABLE = "No services available, please add new services via the form below",
 }

@@ -31,13 +31,22 @@ main {
   background-color: var(--color-warning);
   border-radius: var(--border-radius);
   margin: calc(var(--margin) / 2);
+  color: var(--black);
+  padding: var(--smallLargePadding);
 }
 
 .form-footer input[type="button"] {
   background: var(--green);
   margin: 0;
-  place-self: end;
+  display: grid;
+  padding: calc(var(--padding) / 2) var(--padding);
+  width: 100%;
 }
 .form-footer label {
   display: grid;
+}
+
+.form-footer label input {
+  border-radius: calc(var(--border-radius) / 2);
+  margin-top: var(--base-size-half);
 }
