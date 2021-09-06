@@ -5,15 +5,13 @@ import { RemoveServiceButton, UpdateServiceButton } from "../Buttons"
 interface Props {
   data: StoreDataItem
 }
-export const ServiceListItem = ({ data }: Props) => {
-  const { name, status } = data
-  const serviceStatus = JSON.parse(status) as Status
-
+export const ServiceListItem = ({ data: { status } }: Props) => {
+  const { name, url } = JSON.parse(status) as Status
   return (
     <li>
-      Name: {name}
-      Name: {serviceStatus.name}
-      URL: {serviceStatus.url}
+      <a href={url} rel="noopener noreferrer" target="_blank">
+        {name}
+      </a>
       <RemoveServiceButton name={name} />
       <UpdateServiceButton name={name} />
     </li>
