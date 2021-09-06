@@ -48,11 +48,15 @@ export async function fetchService(
       signal: controller.signal,
     })
 
+    if (!response.ok || response === null) {
+      return null
+    }
+
     return response
   } catch (error) {
     if (!controller.signal.aborted) {
-      // eslint-disable-next-line no-console
       // Send to DataDog or similar
+      // eslint-disable-next-line no-console
       console.error({ error, method, payload })
     }
   }
